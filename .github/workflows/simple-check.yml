@@ -1,4 +1,4 @@
-name: Simple Check
+name: CI Pipeline
 
 on:
   push:
@@ -21,3 +21,14 @@ jobs:
 
       - name: Run tests
         run: pytest
+
+  docker-build:
+    runs-on docker-build:
+    runs-on: ubuntu-latest
+    needs: test-job  # запускается после тестов
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t my-ci-image:latest .
